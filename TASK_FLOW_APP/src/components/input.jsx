@@ -1,8 +1,26 @@
+import { Plus } from 'lucide-react';
 import React from 'react'
 
 const input = () => {
+  let value;
+  let onchange;
+  let onadd;
+  let onkeypress;
+
   return (
-    <div>input</div>
+    <div className='backdrop-blur-2xl bg-white/5 rounded-2xl border border-white/10 p-3 mb-4 shadow-2xl hover:bg-white/10 transition-all duration-300'>
+      <div className='flex gap-2 justify-between'>
+        <input
+         type="text" 
+         value={value}
+         onchange={onchange}
+         onKeyDown={onkeypress}
+         placeholder='whats on your mind ??'
+         className='flex px-4 py-3 bg-white/10 text-white placeholder:-white/40 rounded-2xl focus:outline-none focus:ring-2  focus:ring-violet-500/50 font-medium text-sm border border-white/5 backdrop-blur-2xl transition-all'
+          />
+          <button  className='bg-linear-to-br from-violet-600 via-pink-500 to-purple-500 rounded-xl px-6 py-3 hover:shadow-xl hover:shadow-pink-500/50 transition-all duration-300 flex item-center justify-center gap-2 font-bold text-sm hover:scale-105 active:scale-105'> Add</button>
+      </div>
+    </div>
   )
 }
 
