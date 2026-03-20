@@ -2,8 +2,8 @@ import React from 'react'
 import todoitem from './todoitem'
 import { Sparkles } from 'lucide-react';
 
-const todolist = () => {
-  let todo = [];
+const todolist = ({todo}) => {
+  //let todo = [];
   let editid;
   let edittext;
   let ontoggle;

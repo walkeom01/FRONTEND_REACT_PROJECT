@@ -3,6 +3,7 @@ import React from 'react'
 
 const todoitem = ({
   todo,
+  index,
   editid,
   edittext,
   ontoggle,
