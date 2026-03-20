@@ -40,7 +40,7 @@ const header = () => {
             <div className=' absolute inset-0 bg-linear-to-br  from-emerald-400 via-teal-400 to-cyan-400 rounded-full transition-all duration-700 ease-out shadow-lg' style={{ width: `${progress}%` }}>
 
             </div>
-            <div className=' absolute inset-0 bg-linear-to-br  from-transpaarent  via-white/30 to-transparent animate-shimmer '>
+            <div className=' absolute inset-0 bg-linear-to-br  from-transpaarent  via-white/30 to-transparent animate-none '>
 
             </div>
           </div>
