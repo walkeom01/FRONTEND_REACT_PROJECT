@@ -19,7 +19,7 @@ const App = () => {
   const [edittext, setedittext] = useState("")
   const [hasload, sethasloaded] = useState(false)
 
-  
+
   //get from local storage
 
 
@@ -45,15 +45,50 @@ const App = () => {
       createdate: new Date().toISOString()
     };
     settodo([newtodo, ...todo]);
-    setinput("")
-    playsound("add")
-    shownotification("🌟🤩 Task added successfully!")
+    setinput("");
+    playsound("add");
+    shownotification("🌟🤩 Task added successfully!");
   }
 
+  // key press down{add}
+  const handleKeyPress = (e) => {
+    if (e.key == "Enter") {
+      handleaddtodo();
+    }
+  }
+
+  //start edit
+  const startEditing = (id, text) => {
+    seteditingid(id);
+    setedittext(text);
+  }
   //update todo
+  const saveEdit = (id) => {
+    if (!edittext.trim()) return;
+
+    settodo(todo.map((todo) => { todo.id === id ? { ...todo, text: edittext } : todo }))
+
+    setedittext("");
+    seteditingid(null);
+    playsound("update");
+    shownotification("task updated successfully!");
+  }
+
+  //cancel edit
+
+  const cancelEdit = () => {
+    setedittext("");
+    seteditingid(null);
+  }
 
 
   //delete todo
+
+  const deleteTodo = (id) => {
+    settodo(todo.filter((todo) => todo.id !== id))
+    playsound("delete")
+    shownotification("task deleted", "info")
+  }
 
   return (
     <div className='min-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 p-3 sm:p-6 relative overflow-hidden'
@@ -66,8 +101,11 @@ const App = () => {
       <div className='max-w-3xl mx-auto relative z-10'>
         <Header />
         <StatsGrid />
-        <Input value={input} onChange={(e) => setinput(e.target.value)} onAdd={handleaddtodo} />
-        <Todolist todo= {todo} />
+        <Input value={input} onChange={(e) => setinput(e.target.value)} onAdd={handleaddtodo} onKeyPress={handleKeyPress} />
+        <Todolist todo={todo} ondelete={deleteTodo} onStartEdit={saveEdit}
+          onsaveedit={saveEdit} oncacleedit={cancelEdit}
+        editingid={editingid} on
+        />
         <Clearbutton />
       </div>
 

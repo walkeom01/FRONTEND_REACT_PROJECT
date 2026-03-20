@@ -2,15 +2,15 @@ import React from 'react'
 import todoitem from './todoitem'
 import { Sparkles } from 'lucide-react';
 
-const todolist = ({todo}) => {
+const todolist = ({todo ,onstartedit,onsaveedit ,oncacleedit, ondelete ,}) => {
   //let todo = [];
   let editid;
   let edittext;
   let ontoggle;
-  let onstartedit;
-  let onsaveedit;
-  let oncacleedit;
-  let ondelete;
+  //let onstartedit;
+  //let onsaveedit;
+  //let oncacleedit;
+ // let ondelete;
   let onedittextchange;
   let oneditkeypress;
 
