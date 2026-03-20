@@ -2,7 +2,20 @@ import React from 'react'
 
 const animate = () => {
   return (
-    <div>animate</div>
+    <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+      <div className='absolute -top-40 -right-40 w-80 h-80 bg-purple-500
+      rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-pulse'>
+
+        <div className='abolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-fullmix-blend-screen filter blur-3xl opacity-30 animate-pulse'
+          style={{ animationDelay: "2s" }}>
+        </div>
+        <div className='absolute top-1/2 left-1/2 w-80 h-80 bg-indigo-500 rounded-full 
+          mix-blend-screen fliter blur-3xl opacity-30 animate-pulse'
+          style={{ animationDelay: "4s" }}>
+        </div>
+      </div>
+      <div></div>
+    </div>
   )
 }
 
