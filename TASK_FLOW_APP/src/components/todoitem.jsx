@@ -1,4 +1,4 @@
-import { Check, Save, X ,Edit2 , Trash2} from 'lucide-react'
+import { Check, Save, X, Edit2, Trash2 } from 'lucide-react'
 import React from 'react'
 
 const todoitem = ({
@@ -14,7 +14,7 @@ const todoitem = ({
   onedittextchange,
   oneditkeypress,
 }) => {
-  const isediting = editid == todo.id
+  const isediting = editid == todo.id;
   return (
     <>
       <div className={`group backdrop-blur-2xl bg-whitw/5 hover:bg-white /10 rounded-2xl p-3 flex
@@ -31,7 +31,7 @@ const todoitem = ({
               hover:scale-110 active:scale-95 ${todo.completed ? "bg-linear-to-br from-emerald-400 to text-teal-500 border-emerald-400 shadow-lg shadow-emerald-400/50" : "border-white/30 hover:border-voilet-400 hover:bg-violet-500/20"
 
             }`}>
-          {todo.completed && <Check size={14} className='text-white font-bold' />}
+          {todo.completed && (<Check size={14} className='text-white font-bold' />)}
         </button>
         {isediting ? (<>
           <input type="text" value={edittext} onChange={onedittextchange}
@@ -66,11 +66,11 @@ const todoitem = ({
 
             </button>
           </>) : (<>
-            <button onClick={() => onstartedit(todo.id,todo.text)}
+            <button onClick={() => onstartedit(todo.id, todo.text)}
               className='w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500 hover:text-white 
               transition-all duration-300 flex items-center justify-center transform hover:scale-110 active:scale-95 border border-blue-500/30'
             >
-              <Edit2 size={14}/>
+              <Edit2 size={14} />
 
             </button>
             <button onClick={() => ondelete(todo.id)}
@@ -78,7 +78,7 @@ const todoitem = ({
               transition-all duration-330 flex items-center justify-center transform hover:scale-110 active:scale-95 
               border border-rose-500/30  '
             >
-              <Trash2 size={14}/>
+              <Trash2 size={14} />
 
             </button>
           </>)}

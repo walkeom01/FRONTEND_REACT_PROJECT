@@ -6,8 +6,10 @@ import StatsGrid from './components/statsgrid'
 import Input from './components/input'
 import Todolist from './components/todolist'
 import Clearbutton from './components/clearbutton'
+import { playsound } from "./components/PlaySound";
 
-const playsound = () => { };
+
+
 const App = () => {
 
   const STORAGE_KEY = "todo";
@@ -21,10 +23,29 @@ const App = () => {
 
 
   //get from local storage
-
+  useEffect(() => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        settodos(JSON.parse(data))
+      }
+    } catch (error) {
+      console.log("Load Error: ", error)
+    } finally {
+      sethasloaded(true);
+    }
+  }, [])
 
   //save to local storage
+  useEffect(() => {
+    if (!hasloaded) return;
+    try {
+      localStorage.setitem(STORAGE_KEY, JSON.stringify(todos))
+    } catch (error) {
+      console.log("save error : ", error)
 
+    }
+  }, [todo, hasloaded])
 
   //show notification
   const shownotification = (message, type = "success") => {
@@ -50,20 +71,47 @@ const App = () => {
     shownotification("🌟🤩 Task added successfully!");
   }
 
+
+  // onToggle
+  const toggletodo = (id) => {
+    settodo(
+      todo.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+    const todo = todo.find((t) => t.id === id);
+
+    if (!todo.completed) {
+      playSound("complete");
+      shownotification("🎉 Greate Job! Task completed!");
+    }
+  };
+
   // key press down{add}
-  const handleKeyPress = (e) => {
+  const handlekeypress = (e) => {
     if (e.key == "Enter") {
       handleaddtodo();
     }
   }
 
+
+  // edit key press 
+  const handleeditkeypress = (e, id) => {
+    if (e.key === "Enter") {
+      saveedit(id);
+    } else if (e.key === "Escape") {
+      oncacleedit();
+    }
+  };
+
+
   //start edit
-  const startEditing = (id, text) => {
+  const startediting = (id, text) => {
     seteditingid(id);
     setedittext(text);
   }
   //update todo
-  const saveEdit = (id) => {
+  const saveedit = (id) => {
     if (!edittext.trim()) return;
 
     settodo(todo.map((todo) => { todo.id === id ? { ...todo, text: edittext } : todo }))
@@ -90,6 +138,17 @@ const App = () => {
     shownotification("task deleted", "info")
   }
 
+  // clear all completed task
+  const clearCompleted = () => {
+    settodo(todo.filter((t) => !t.completed));
+    playsound("delete");
+    shownotification("🗑️ Task deleted ", "info");
+  };
+
+  const activeTodos = todo.filter((t) => !t.completed).length;
+  const completedTodos = todo.filter((t) => t.completed).length;
+  const progress = todo.length > 0 ? (completedTodos / todo.length) * 100 : 0;
+
   return (
     <div className='min-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 p-3 sm:p-6 relative overflow-hidden'
       style={{ minHeight: '100vh' }}>
@@ -99,14 +158,28 @@ const App = () => {
         notification={notification} onClose={() => setnotification(null)} />
 
       <div className='max-w-3xl mx-auto relative z-10'>
-        <Header />
-        <StatsGrid />
-        <Input value={input} onChange={(e) => setinput(e.target.value)} onAdd={handleaddtodo} onKeyPress={handleKeyPress} />
-        <Todolist todo={todo} ondelete={deleteTodo} onStartEdit={saveEdit}
-          onsaveedit={saveEdit} oncacleedit={cancelEdit}
-        editingid={editingid} on
+        <Header
+          activeTodos={activeTodos}
+          progress={progress}
+          totalTodos={todo.length}
         />
-        <Clearbutton />
+
+        <StatsGrid
+          activeTodos={activeTodos}
+          completedTodos={completedTodos}
+          totalTodos={todo.length}
+        />
+
+        <Input value={input} onChange={(e) => setinput(e.target.value)} onAdd={handleaddtodo} onKeyPress={handleKeyPress} />
+        <Todolist todo={todo} ondelete={deleteTodo} onstartedit={saveedit}
+          onsaveedit={saveedit} oncacleedit={cancelEdit}
+          editingid={editingid}
+        />
+        <ClearButton
+          completedTodos={completedTodos}
+          onClick={clearCompleted}
+        />
+
       </div>
 
       <style>
