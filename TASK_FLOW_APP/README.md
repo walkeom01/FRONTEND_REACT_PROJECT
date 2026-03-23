@@ -1,3 +1,10 @@
+TASK FLOW MANAGER PROJECT 
+This project is developed  to solve our day to day task , through which we can be more productive.
+
+TECH STACK : REACT JS 
+FRAMEWORK : TAILWIND CSS
+LIBRARIES : LUCIDE REACT 
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
