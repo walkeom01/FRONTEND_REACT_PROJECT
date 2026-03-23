@@ -1,225 +1,231 @@
-import React, { useState } from 'react'
-import Animate from './components/animate'
-import Notification from './components/notification'
-import Header from './components/header'
-import StatsGrid from './components/statsgrid'
-import Input from './components/input'
-import Todolist from './components/todolist'
-import Clearbutton from './components/clearbutton'
-import { playsound } from "./components/PlaySound";
-
+import React, { useEffect, useState } from "react";
+import Animate from "./components/Animate";
+import Notification from "./components/Notification";
+import Header from "./components/Header";
+import StatsGrid from "./components/StatsGrid";
+import Input from "./components/Input";
+import TodoList from "./components/TodoList";
+import ClearButton from "./components/ClearButton";
+import { playSound } from "./components/PlaySound";
 
 
 const App = () => {
+  const STORAGE_KEY = "todos";
 
-  const STORAGE_KEY = "todo";
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [hasLoaded, setHasLoaded] = useState(false);
 
-  const [todo, settodo] = useState([])
-  const [input, setinput] = useState("")
-  const [notification, setnotification] = useState(null)
-  const [editingid, seteditingid] = useState(null)
-  const [edittext, setedittext] = useState("")
-  const [hasload, sethasloaded] = useState(false)
-
-
-  //get from local storage
+  // console.log("my todo ", todos);
+  
+  // get from locatStorage
   useEffect(() => {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      if (data) {
-        settodos(JSON.parse(data))
-      }
-    } catch (error) {
-      console.log("Load Error: ", error)
-    } finally {
-      sethasloaded(true);
+   try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if(data){
+      setTodos(JSON.parse(data))
     }
+   } catch (error) {
+    console.log("Load Error: ",error)
+   } finally{
+    setHasLoaded(true);
+   }
   }, [])
-
-  //save to local storage
+  
+  
+  // save to localStorage
   useEffect(() => {
-    if (!hasloaded) return;
+    if(!hasLoaded) return;
     try {
-      localStorage.setitem(STORAGE_KEY, JSON.stringify(todos))
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(todos))
     } catch (error) {
-      console.log("save error : ", error)
-
+      console.log("save error : ",error)
+      
     }
-  }, [todo, hasloaded])
+  }, [todos,hasLoaded])
+  
 
-  //show notification
-  const shownotification = (message, type = "success") => {
-    setnotification({ message, type });
+  // show notification
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
     setTimeout(() => {
-      setnotification(null)
+      setNotification(null);
     }, 3000);
-  }
+  };
 
-  //add todo 
-  const handleaddtodo = () => {
+  // add todo
+  const handleAddTodo = () => {
     if (!input.trim()) return;
 
-    const newtodo = {
+    const newTodo = {
       id: Date.now(),
       text: input,
       completed: false,
-      createdate: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-    settodo([newtodo, ...todo]);
-    setinput("");
-    playsound("add");
-    shownotification("🌟🤩 Task added successfully!");
-  }
 
+    setTodos([newTodo, ...todos]);
+    setInput("");
+    playSound("add");
+    showNotification("✨ Task added Successfully!");
+  };
 
   // onToggle
-  const toggletodo = (id) => {
-    settodo(
-      todo.map((todo) =>
+  const toggleTodo = (id) => {
+    setTodos(
+      todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
-    const todo = todo.find((t) => t.id === id);
+    const todo = todos.find((t) => t.id === id);
 
     if (!todo.completed) {
       playSound("complete");
-      shownotification("🎉 Greate Job! Task completed!");
+      showNotification("🎉 Greate Job! Task completed!");
     }
   };
 
-  // key press down{add}
-  const handlekeypress = (e) => {
+  // key press down ( add )
+  const handleKeyPress = (e) => {
     if (e.key == "Enter") {
-      handleaddtodo();
-    }
-  }
-
-
-  // edit key press 
-  const handleeditkeypress = (e, id) => {
-    if (e.key === "Enter") {
-      saveedit(id);
-    } else if (e.key === "Escape") {
-      oncacleedit();
+      handleAddTodo();
     }
   };
 
+  // edit key press
+  const handleEditKeyPress = (e, id) => {
+    if (e.key === "Enter") {
+      saveEdit(id);
+    } else if (e.key === "Escape") {
+      cancelEdit();
+    }
+  };
 
-  //start edit
-  const startediting = (id, text) => {
-    seteditingid(id);
-    setedittext(text);
-  }
-  //update todo
-  const saveedit = (id) => {
-    if (!edittext.trim()) return;
+  // start edit
+  const startEditing = (id, text) => {
+    // console.log("editing started",id,text)
+    setEditingId(id);
+    setEditText(text);
+  };
 
-    settodo(todo.map((todo) => { todo.id === id ? { ...todo, text: edittext } : todo }))
+  // update todo
+  const saveEdit = (id) => {
+    if (!editText.trim()) return;
 
-    setedittext("");
-    seteditingid(null);
-    playsound("update");
-    shownotification("task updated successfully!");
-  }
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, text: editText } : todo))
+    );
 
-  //cancel edit
+    setEditText("");
+    setEditingId(null);
+    playSound("update");
+    showNotification("Task updated successfully!");
+  };
 
+  // cancel edit
   const cancelEdit = () => {
-    setedittext("");
-    seteditingid(null);
-  }
+    setEditText("");
+    setEditingId(null);
+  };
 
-
-  //delete todo
-
+  // delete todos
   const deleteTodo = (id) => {
-    settodo(todo.filter((todo) => todo.id !== id))
-    playsound("delete")
-    shownotification("task deleted", "info")
-  }
+    setTodos(todos.filter((todos) => todos.id !== id));
+    playSound("delete");
+    showNotification("🗑️ Task deleted ", "info");
+  };
 
   // clear all completed task
   const clearCompleted = () => {
-    settodo(todo.filter((t) => !t.completed));
-    playsound("delete");
-    shownotification("🗑️ Task deleted ", "info");
+    setTodos(todos.filter((t) => !t.completed));
+    playSound("delete");
+    showNotification("🗑️ Task deleted ", "info");
   };
 
-  const activeTodos = todo.filter((t) => !t.completed).length;
-  const completedTodos = todo.filter((t) => t.completed).length;
-  const progress = todo.length > 0 ? (completedTodos / todo.length) * 100 : 0;
+  const activeTodos = todos.filter((t) => !t.completed).length;
+  const completedTodos = todos.filter((t) => t.completed).length;
+  const progress = todos.length > 0 ? (completedTodos / todos.length) * 100 : 0;
 
   return (
-    <div className='min-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 p-3 sm:p-6 relative overflow-hidden'
-      style={{ minHeight: '100vh' }}>
+    <>
+      <div
+        className="mih-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 p-3 sm:p-6 relative overflow-hidden"
+        style={{ minHeight: "100vh" }}
+      >
+        <Animate />
 
-      <Animate />
-      <Notification
-        notification={notification} onClose={() => setnotification(null)} />
-
-      <div className='max-w-3xl mx-auto relative z-10'>
-        <Header
-          activeTodos={activeTodos}
-          progress={progress}
-          totalTodos={todo.length}
+        <Notification
+          notification={notification}
+          onClose={() => setNotification(null)}
         />
 
-        <StatsGrid
-          activeTodos={activeTodos}
-          completedTodos={completedTodos}
-          totalTodos={todo.length}
-        />
+        <div className="max-w-3xl mx-auto relative z-10">
+          <Header
+            activeTodos={activeTodos}
+            progress={progress}
+            totalTodos={todos.length}
+          />
 
-        <Input value={input} onChange={(e) => setinput(e.target.value)} onAdd={handleaddtodo} onKeyPress={handleKeyPress} />
-        <Todolist todo={todo} ondelete={deleteTodo} onstartedit={saveedit}
-          onsaveedit={saveedit} oncacleedit={cancelEdit}
-          editingid={editingid}
-        />
-        <ClearButton
-          completedTodos={completedTodos}
-          onClick={clearCompleted}
-        />
+          <StatsGrid
+            activeTodos={activeTodos}
+             completedTodos={completedTodos}
+            totalTodos={todos.length}
+          />
 
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onAdd={handleAddTodo}
+            onKeyPress={handleKeyPress}
+          />
+
+          <TodoList
+            todos={todos}
+            onDelete={deleteTodo}
+            onStartEdit={startEditing}
+            onSaveEdit={saveEdit}
+            onCancelEdit={cancelEdit}
+            editingId={editingId}
+            editText={editText}
+            onEditTextChange={(e) => setEditText(e.target.value)}
+            onEditKeyPress={handleEditKeyPress}
+            onToggle={toggleTodo}
+          />
+
+          <ClearButton
+            completedTodos={completedTodos}
+            onClick={clearCompleted}
+          />
+        </div>
+        <style>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-20px) translateX(10px); }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
       </div>
+    </>
+  );
+};
 
-      <style>
-        {`
-          @keyframes slideIn {
-            from {
-              opacity: 0;
-              transform: translateY(20px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          @keyframes float {
-            0%, 100% {
-              transform: translateY(0px) translateX(0px);
-            }
-            50% {
-              transform: translateY(-20px) translateX(10px);
-            }
-          }
-
-          @keyframes shimmer {
-            0% {
-              transform: translateX(-100%);
-            }
-            100% {
-              transform: translateX(100%);
-            }
-          }
-
-          .animate-shimmer {
-            animation: shimmer 2s infinite;
-          }
-        `}
-      </style>
-    </div>
-  )
-}
-
-export default App
+export default App;

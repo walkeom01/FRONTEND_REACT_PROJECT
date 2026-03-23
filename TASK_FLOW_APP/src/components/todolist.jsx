@@ -1,52 +1,70 @@
-import React from 'react'
-import todoitem from './todoitem'
-import { Sparkles } from 'lucide-react';
+import React from "react";
+import TodoItem from "./TodoItem";
 
-const todolist = ({ todo, oneditkeypress, onedittextchange, editid, edittext, ontoggle, onstartedit, onsaveedit, oncacleedit, ondelete, }) => {
-  //let todo = [];
-  // let editid;
-  // let edittext;
-  // let ontoggle;
-  //let onstartedit;
-  //let onsaveedit;   by using this method learn how to develope any project without making it complicated 
-  //let oncacleedit;
-  // let ondelete;
-  // let onedittextchange;
-  // let oneditkeypress;
+import { Sparkles } from "lucide-react";
 
-  if (todo.length === 0) {
+const TodoList = ({
+  todos,
+  onStartEdit,
+  onSaveEdit,
+  onCancelEdit,
+  editingId,
+  editText,
+  onEditTextChange,
+  onEditKeyPress,
+  onDelete,
+  onToggle
+}) => {
+  // let todos = [];
+  // let editingId;
+  // let editText;
+  // let onToggle;
+  // let onStartEdit;
+  // let onSaveEdit;
+  // let onCancelEdit;
+  // let onDelete;
+  // let onEditTextChange;
+  // let onEditKeyPress;
+
+  if (todos.length === 0) {
     return (
-      <div className='text-center py-16 backdrop-blur-2xl bg-white/5 rounded-2xl border  
-      border-white/0 '>
-        <div className='w-16 h-16 bg-linear-to-br from-violet-500/20 to-fuchsia-500/20
-        rounded-2xl flex items-center justify-center mx-auto mb-3'>
-          <Sparkles size={32} className="text-violet-300"></Sparkles>
-
+      <div className="text-center py-16 backdrop-blur-2xl bg-white/5 rounded-2xl border border-white/0">
+        <div className="w-16 h-16 bg-linear-to-br from-violet-500/20  to-fuchsia-500/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+          <Sparkles size={32} className="text-violet-300" />
         </div>
-        <p className='text-white/90 text-base font-semibold mb-2 '>No Task Yet</p>
-        <p className='text-white/50 text-sm font-bold'>create your first task to get started</p>
+        <p className="text-white/90 text-base font-semibold mb-1">
+          {" "}
+          No tasks yet
+        </p>
+        <p className="text-white/50 text-sm">
+          Create your first task to get started
+        </p>
       </div>
-    )
+    );
   }
+
   return (
-    <div className='space-y-2'>
-      {todo.map((todo, index) => <todoitem
-        key={index}
-        todo={todo}
-        index={index}
-        editid={editid}
-        edittext={edittext}
-        ontoggle={ontoggle}
-        onstartedit={onstartedit}
-        onsaveedit={onsaveedit}
-        oncacleedit={oncacleedit}
-        ondelete={ondelete}
-        onedittextchange={onedittextchange}
-        oneditkeypress={oneditkeypress}
-      />)}
+    <>
+      <div className="space-y-2">
+        {todos.map((todo, index) => (
+          <TodoItem
+            key={index}
+            todo={todo}
+            index={index}
+            editingId={editingId}
+            editText={editText}
+            onToggle={onToggle}
+            onStartEdit={onStartEdit}
+            onSaveEdit={onSaveEdit}
+            onCancelEdit={onCancelEdit}
+            onDelete={onDelete}
+            onEditTextChange={onEditTextChange}
+            onEditKeyPress={onEditKeyPress}
+          />
+        ))}
+      </div>
+    </>
+  );
+};
 
-    </div>
-  )
-}
-
-export default todolist
+export default TodoList;
