@@ -1,13 +1,10 @@
-import React from 'react';
-import Navbar from './components/Navbar/Navbar'
-
+import React from 'react'
+import Navbar from './components/Navbar/Navbar.jsx'
 const App = () => {
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
     </div>
-
-    // message for team framer motion is not required for this project   
   )
 }
 
