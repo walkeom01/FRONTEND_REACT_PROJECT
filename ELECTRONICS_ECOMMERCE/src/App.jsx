@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import Navbar from './components/Navbar/Navbar'
 
 const App = () => {
   return (
-    <div className='bg-red-600'>App</div>
+    <div>
+      <Navbar></Navbar>
+    </div>
 
     // message for team framer motion is not required for this project   
   )
