@@ -10,12 +10,7 @@ const Category = () => {
       <div className="container mx-auto px-4">
 
          
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold">Shop by Category</h1>
-          <p className="text-gray-500 text-sm mt-2">
-            Explore trending gadgets and accessories
-          </p>
-        </div>
+        
 
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
