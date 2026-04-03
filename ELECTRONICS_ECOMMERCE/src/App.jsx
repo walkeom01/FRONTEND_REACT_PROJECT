@@ -20,6 +20,18 @@ const BannerData ={
    
 
 };
+const BannerData2 ={
+  discount : "30%",
+  title : "fine smile",
+  date : "2 april 2026",
+  image : headphone ,
+  title2 :"air solo bass",
+  title3 : "winter sale",
+  title4 : "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet, exercitationem.",
+  bgColor : "#2dcc6f"
+   
+
+};
 const App = () => {
   return (
     <div className='dark:bg-gray-800 dark:text-white duration-700 overflow-hidden'>
@@ -30,6 +42,7 @@ const App = () => {
       <Services></Services>
       <Banner data={BannerData}></Banner>
       <Product></Product>
+      <Banner data={BannerData2}></Banner>
     </div>
   )
 }
