@@ -6,7 +6,7 @@ import Category2 from './components/Category/Category2.jsx'
 import Services from './components/Services/Services.jsx'
 import Banner from './components/Banner/Banner.jsx';
 import headphone from './assets/hero/headphone.png';
-
+import Product from './components/Product/Product.jsx'
 
 const BannerData ={
   discount : "30%",
@@ -29,6 +29,7 @@ const App = () => {
       <Category2></Category2>
       <Services></Services>
       <Banner data={BannerData}></Banner>
+      <Product></Product>
     </div>
   )
 }
